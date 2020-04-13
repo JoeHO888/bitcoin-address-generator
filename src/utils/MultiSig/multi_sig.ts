@@ -1,5 +1,10 @@
+import * as bs58check from "bs58check";
+
+import { hash160 } from "../Common";
 import { compileOpcodes } from "./opcode";
 import {
+    addressLength,
+    addressPrefix,
     OP_INT_BASE,
     OP_CHECKMULTISIG,
 } from "./constant";
@@ -18,6 +23,18 @@ const generateRedeemScript = (pubKeys: string[], m: number): Buffer => {
     return redeemScript
 }
 
+const generateMultiSigAddress = (redeemScript: Buffer): string => {
+    const redeemScriptHash: Buffer = hash160(redeemScript);
+    const payload: Buffer = Buffer.allocUnsafe(addressLength);
+
+    payload.writeUInt8(addressPrefix, 0);
+    redeemScriptHash.copy(payload, 1);
+
+    const multiSigAddress: string = bs58check.encode(payload);
+    return multiSigAddress;
+}
+
 export {
-    generateRedeemScript
+    generateRedeemScript,
+    generateMultiSigAddress
 };
