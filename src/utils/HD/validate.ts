@@ -5,8 +5,7 @@ type seedValidation = {
 }
 
 const isStringHexadecimal = (string: string): boolean => {
-    const hexFormat = parseInt(string, 16)
-    return (hexFormat.toString(16) === string)
+    return ! isNaN(parseInt(string,16))
 }
 
 const isMasterKeySeedValid = (seed: string): seedValidation => {
