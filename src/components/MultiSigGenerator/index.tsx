@@ -4,6 +4,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 
+import { generateMultiSigAddress, generateRedeemScript } from "../../utils";
 import { PublicKeyInput } from "./PublicKeyInput";
 import { routes } from "../../routes";
 
@@ -21,7 +22,14 @@ const MultiSigGenerator: React.FC = () => {
 
     const onSubmit = (event: React.MouseEvent<HTMLElement>) => {
         event.preventDefault();
-        console.log("Submitted")
+        let pubKeys = publicKeyObjArray.filter(element => element.valid && element.value).map(
+            (element) => {
+                return element.value
+            }
+        )
+        const reedemScript = generateRedeemScript(pubKeys, parseInt(signatureNumber));
+        const address = generateMultiSigAddress(reedemScript)
+        setAddress(address);
     }
 
     const insertPublicKeyElement = (publicKeyElementId: number): void => {
