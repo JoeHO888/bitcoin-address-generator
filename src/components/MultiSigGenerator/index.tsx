@@ -4,6 +4,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 
+import { PublicKeyInput } from "./PublicKeyInput";
 import { routes } from "../../routes";
 
 const signatureNumberOptions = Array.from(Array(21).keys()).slice(1);
@@ -23,6 +24,47 @@ const MultiSigGenerator: React.FC = () => {
         console.log("Submitted")
     }
 
+    const insertPublicKeyElement = (publicKeyElementId: number): void => {
+        let newPublicKeyObjArray = [...publicKeyObjArray];
+        newPublicKeyObjArray.splice(publicKeyElementId + 1, 0, initialPublicKeyElement);
+        setPublicKeyObjArray(newPublicKeyObjArray);
+    }
+
+    const makePublicKeyElementInvalid = (publicKeyElementId: number): void => {
+        if (publicKeyElementId === 0) {
+            return
+        }
+        let newPublicKeyObjArray = [...publicKeyObjArray];
+        let newPublicKeyElement = { ...newPublicKeyObjArray[publicKeyElementId] };
+        newPublicKeyElement.valid = false;
+        newPublicKeyObjArray[publicKeyElementId] = newPublicKeyElement;
+        setPublicKeyObjArray(newPublicKeyObjArray);
+        return
+    }
+
+    const updatePublicKeyObjArray = (event: React.ChangeEvent<HTMLInputElement>, publicKeyElementId: number) => {
+        let newPublicKeyObjArray = [...publicKeyObjArray];
+        let newPublicKeyElement = { ...newPublicKeyObjArray[publicKeyElementId] };
+        newPublicKeyElement.value = event.target.value;
+        newPublicKeyObjArray[publicKeyElementId] = newPublicKeyElement;
+        setPublicKeyObjArray(newPublicKeyObjArray);
+    }
+
+    const publicKeyElement = publicKeyObjArray.filter(element => element.valid).map(
+        (element, index) => {
+            return (
+                <PublicKeyInput
+                    publicKeyElementId={index}
+                    insertPublicKeyElement={insertPublicKeyElement}
+                    makePublicKeyElementInvalid={makePublicKeyElementInvalid}
+                    key={index.toString()}
+                    publicKeyElementValue={element.value}
+                    updatePublicKeyObjArray={updatePublicKeyObjArray}
+                />
+            )
+        }
+    );
+
     return (
         <div className="generator-form">
             <h1>
@@ -38,6 +80,7 @@ const MultiSigGenerator: React.FC = () => {
             </h3>
             <form noValidate autoComplete="off">
                 <Grid container>
+                    {publicKeyElement}
                     <Grid container className="form-field">
                         <Grid item >
                             <TextField
