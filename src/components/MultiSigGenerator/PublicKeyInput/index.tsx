@@ -6,7 +6,8 @@ import { green } from '@material-ui/core/colors';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 
-type PublicKeyElementAttributes = {
+export type PublicKeyElementAttributes = {
+    valid: boolean;
     Id: number;
     value: string;
     hasError: boolean;
@@ -16,10 +17,9 @@ type PublicKeyElementAttributes = {
 type publicKeyElementProps = {
     publicKeyElementAttributes: PublicKeyElementAttributes;
     insertPublicKeyElement: (publicKeyElementId: number) => void;
-    makePublicKeyElementInvalid: (publicKeyElementId: number) => void;
     updatePublicKeyObjArray: (
-        event: React.ChangeEvent<HTMLInputElement>,
         publicKeyElementId: number,
+        newPublicKeyElement: PublicKeyElementAttributes
     ) => void;
 }
 
@@ -28,43 +28,67 @@ const PublicKeyInput: React.FC<publicKeyElementProps> = (publicKeyElementProps) 
     const value = publicKeyElementProps.publicKeyElementAttributes.value
     const hasError = publicKeyElementProps.publicKeyElementAttributes.hasError
     const helperText = publicKeyElementProps.publicKeyElementAttributes.helperText
+    const valid = publicKeyElementProps.publicKeyElementAttributes.valid
+
+    const publicKeyElementAttributes = publicKeyElementProps.publicKeyElementAttributes
 
     const insertPublicKeyElement = () => {
         publicKeyElementProps.insertPublicKeyElement(publicKeyElementId);
     }
 
     const beInvalid = () => {
-        publicKeyElementProps.makePublicKeyElementInvalid(publicKeyElementId);
+        let newPublicKeyElement = { ...publicKeyElementAttributes };
+        if (publicKeyElementId != 0) {
+            newPublicKeyElement.valid = false;
+        }
+
+        publicKeyElementProps.updatePublicKeyObjArray(
+            publicKeyElementId,
+            newPublicKeyElement
+        );
     }
 
-    const updateAttribute = (event: React.ChangeEvent<HTMLInputElement>) => {
-        publicKeyElementProps.updatePublicKeyObjArray(event, publicKeyElementId);
+    const updateValue = (event: React.ChangeEvent<HTMLInputElement>) => {
+        let newPublicKeyElement = { ...publicKeyElementAttributes };
+        newPublicKeyElement.value = event.target.value;
+        publicKeyElementProps.updatePublicKeyObjArray(
+            publicKeyElementId,
+            newPublicKeyElement
+        );
     }
+    if (valid) {
+        return (
+            <Grid container className="form-field">
+                <Grid item xs={11}>
+                    <TextField
+                        error={hasError}
+                        fullWidth
+                        placeholder="02/03"
+                        helperText={helperText}
+                        margin="normal"
+                        id={publicKeyElementId.toString()}
+                        onChange={updateValue}
+                        value={value}
+                        label="Compressed Public Key" />
+                </Grid>
+                <Grid item xs={1}>
+                    <IconButton aria-label="add" style={{ color: green[500] }} onClick={insertPublicKeyElement}>
+                        <AddIcon />
+                    </IconButton>
+                    <IconButton aria-label="remove" color="secondary" onClick={beInvalid}>
+                        <RemoveIcon />
+                    </IconButton>
+                </Grid>
+            </Grid>
+        )
+    }
+    else {
+        return (
+            <div>
 
-    return (
-        <Grid container className="form-field">
-            <Grid item xs={11}>
-                <TextField
-                    error={hasError}
-                    fullWidth
-                    placeholder="02/03"
-                    helperText={helperText}
-                    margin="normal"
-                    id={publicKeyElementId.toString()}
-                    onChange={updateAttribute}
-                    value={value}
-                    label="Compressed Public Key" />
-            </Grid>
-            <Grid item xs={1}>
-                <IconButton aria-label="add" style={{ color: green[500] }} onClick={insertPublicKeyElement}>
-                    <AddIcon />
-                </IconButton>
-                <IconButton aria-label="remove" color="secondary" onClick={beInvalid}>
-                    <RemoveIcon />
-                </IconButton>
-            </Grid>
-        </Grid>
-    )
+            </div>
+        )
+    }
 }
 
 export { PublicKeyInput }

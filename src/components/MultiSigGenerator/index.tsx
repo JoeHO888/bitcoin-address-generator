@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 
 import { generateMultiSigAddress, generateRedeemScript } from "../../utils";
-import { PublicKeyInput } from "./PublicKeyInput";
+import { PublicKeyInput, PublicKeyElementAttributes } from "./PublicKeyInput";
 import { routes } from "../../routes";
 import {
     isAmountSignatureProper,
@@ -34,8 +34,8 @@ const MultiSigGenerator: React.FC = () => {
         event.preventDefault();
         setSignatureNumberError(false);
         setSignatureNumberHelperText(defaultSignatureNumberHelperText);
-        
-        const validatedPublicKeyObjArray = validatePublicKeyObjArray(publicKeyObjArray,defaultPublicKeyInputText);
+
+        const validatedPublicKeyObjArray = validatePublicKeyObjArray(publicKeyObjArray, defaultPublicKeyInputText);
 
         setPublicKeyObjArray(validatedPublicKeyObjArray);
         const hasErrorArray = validatedPublicKeyObjArray.map((ele) => ele.hasError);
@@ -69,46 +69,33 @@ const MultiSigGenerator: React.FC = () => {
         setPublicKeyObjArray(newPublicKeyObjArray);
     }
 
-    const makePublicKeyElementInvalid = (publicKeyElementId: number): void => {
-        if (publicKeyElementId === 0) {
-            return
-        }
-        let newPublicKeyObjArray = [...publicKeyObjArray];
-        let newPublicKeyElement = { ...newPublicKeyObjArray[publicKeyElementId] };
-        newPublicKeyElement.valid = false;
-        newPublicKeyObjArray[publicKeyElementId] = newPublicKeyElement;
-        setPublicKeyObjArray(newPublicKeyObjArray);
-    }
+    const updatePublicKeyObjArray = (
+        publicKeyElementId: number,
+        newPublicKeyElement: PublicKeyElementAttributes
+    ) => {
 
-    const updatePublicKeyObjArray = (event: React.ChangeEvent<HTMLInputElement>, publicKeyElementId: number) => {
         let newPublicKeyObjArray = [...publicKeyObjArray];
-        let newPublicKeyElement = { ...newPublicKeyObjArray[publicKeyElementId] };
-        newPublicKeyElement.value = event.target.value;
         newPublicKeyObjArray[publicKeyElementId] = newPublicKeyElement;
         setPublicKeyObjArray(newPublicKeyObjArray);
     }
 
     const publicKeyControls = publicKeyObjArray.map(
         (element, index) => {
-            let inputControl = <div key={index.toString()}></div>
             const attributes = {
                 Id: index,
                 value: element.value,
                 hasError: element.hasError,
-                helperText: element.helperText
+                helperText: element.helperText,
+                valid: element.valid
             }
-            if (element.valid) {
-                inputControl = <PublicKeyInput
-                    publicKeyElementAttributes={attributes}
-                    key={index.toString()}
-                    insertPublicKeyElement={insertPublicKeyElement}
-                    makePublicKeyElementInvalid={makePublicKeyElementInvalid}
-                    updatePublicKeyObjArray={updatePublicKeyObjArray}
-                />
-            }
-            return (
-                inputControl
-            )            
+
+            return (<PublicKeyInput
+                publicKeyElementAttributes={attributes}
+                key={index.toString()}
+                insertPublicKeyElement={insertPublicKeyElement}
+                updatePublicKeyObjArray={updatePublicKeyObjArray}
+            />
+            )
         }
     );
 
