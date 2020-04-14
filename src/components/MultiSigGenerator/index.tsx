@@ -90,7 +90,7 @@ const MultiSigGenerator: React.FC = () => {
 
     const publicKeyElement = publicKeyObjArray.map(
         (element, index) => {
-            let inputControl = <></>
+            let inputControl = <div key={index.toString()}></div>
             if (element.valid) {
                 inputControl = <PublicKeyInput
                     publicKeyElementId={index}
@@ -102,10 +102,10 @@ const MultiSigGenerator: React.FC = () => {
                     hasError={element.hasError}
                     helperText={element.helperText}
                 />
-                return (
-                    inputControl
-                )
             }
+            return (
+                inputControl
+            )            
         }
     );
 
