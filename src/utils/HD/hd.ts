@@ -25,6 +25,8 @@ const deriveHDSegWitAddress = (seed: string, derivedPath: string) => {
 
     // Create Master Node
 
+    const masterNode = new BIP32(masterExtendedKeyPair[0], masterExtendedKeyPair[1]);
+    
     // Parse Path
 
 
