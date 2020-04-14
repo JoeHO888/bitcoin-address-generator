@@ -1,5 +1,7 @@
 import * as ecc from "tiny-secp256k1";
 
+import {isStringHexadecimal} from "../Common";
+
 import {
     compressedPublicKeyPrefix_1,
     compressedPublicKeyPrefix_2,
@@ -22,18 +24,28 @@ type publicKeyValidation = {
     error?: string;
 }
 
-const isValidCompressedPublicKey = (pubKey: Buffer): publicKeyValidation => {
+const isValidCompressedPublicKey = (pubKey: string): publicKeyValidation => {
     let validationResult: publicKeyValidation = { valid: true };
-    if (!isValidPublicKey(pubKey)) {
+
+    if (!isStringHexadecimal(pubKey)) {
+        validationResult.valid = false;
+        validationResult.error = "It is not in hexadecimal format"
+        return validationResult
+    }
+    const pubKeyBuffer = Buffer.from(pubKey, "hex")
+
+    if (!isValidPublicKey(pubKeyBuffer)) {
         validationResult.valid = false;
         validationResult.error = "It is not a public key"
+        return validationResult
     }
 
-    if (!isCompressedPublicKey(pubKey)) {
+    if (!isCompressedPublicKey(pubKeyBuffer)) {
         validationResult.valid = false;
         validationResult.error = "This public key is not a compressed public key."
+        return validationResult
     }
-    
+
     return validationResult;
 }
 

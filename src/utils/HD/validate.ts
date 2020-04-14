@@ -1,11 +1,9 @@
 
+import {isStringHexadecimal} from "../Common";
+
 type seedValidation = {
     valid: boolean;
     error?: string
-}
-
-const isStringHexadecimal = (string: string): boolean => {
-    return ! isNaN(parseInt(string,16))
 }
 
 const isMasterKeySeedValid = (seed: string): seedValidation => {
