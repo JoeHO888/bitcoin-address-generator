@@ -10,6 +10,8 @@ type publicKeyElementProps = {
     publicKeyElementId: number;
     key: string;
     publicKeyElementValue: string;
+    hasError: boolean;
+    helperText: string;
     insertPublicKeyElement: (publicKeyElementId: number) => void;
     makePublicKeyElementInvalid: (publicKeyElementId: number) => void;
     updatePublicKeyObjArray: (event: React.ChangeEvent<HTMLInputElement>, publicKeyElementId: number) => void;
@@ -31,13 +33,17 @@ const PublicKeyInput: React.FC<publicKeyElementProps> = (publicKeyElementProps) 
 
     const value = publicKeyElementProps.publicKeyElementValue;
 
+    const hasError = publicKeyElementProps.hasError;
+
+    const helperText = publicKeyElementProps.helperText;
     return (
         <Grid container className="form-field">
             <Grid item xs={11}>
                 <TextField
+                    error={hasError}
                     fullWidth
                     placeholder="02/03"
-                    helperText="It starts from 02 or 03"
+                    helperText={helperText}
                     margin="normal"
                     id={publicKeyElementId.toString()}
                     onChange={updatePublicKeyObjArray}

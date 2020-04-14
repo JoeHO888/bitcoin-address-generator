@@ -7,15 +7,26 @@ import Grid from '@material-ui/core/Grid';
 import { generateMultiSigAddress, generateRedeemScript } from "../../utils";
 import { PublicKeyInput } from "./PublicKeyInput";
 import { routes } from "../../routes";
+import { isValidCompressedPublicKey, isAmountSignatureProper } from "../../utils";
 
 const signatureNumberOptions = Array.from(Array(21).keys()).slice(1);
-const initialPublicKeyElement = { "valid": true, "value": "" };
+const defaultPublicKeyInputText = "It starts from 02 or 03";
+const initialPublicKeyElement = {
+    "valid": true,
+    "value": "",
+    "hasError": false,
+    "helperText": defaultPublicKeyInputText
+};
+
+const defaultSignatureNumberHelperText = "Amount of signatures required to release the coins";
 
 const MultiSigGenerator: React.FC = () => {
     const [address, setAddress] = useState("");
     const [redeemScript, setRedeemScript] = useState("");
     const [publicKeyObjArray, setPublicKeyObjArray] = useState([initialPublicKeyElement]);
     const [signatureNumber, setSignatureNumber] = useState("2");
+    const [signatureNumberError, setSignatureNumberError] = useState(false);
+    const [signatureNumberHelperText, setSignatureNumberHelperText] = useState(defaultSignatureNumberHelperText);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSignatureNumber(event.target.value);
@@ -23,11 +34,45 @@ const MultiSigGenerator: React.FC = () => {
 
     const onSubmit = (event: React.MouseEvent<HTMLElement>) => {
         event.preventDefault();
+        const validatedPublicKeyObjArray = publicKeyObjArray.map(
+            (element) => {
+                let hasError = false;
+                let helperText = defaultPublicKeyInputText;
+                if (element.value) {
+                    const validationRes = isValidCompressedPublicKey(element.value);
+                    hasError = !validationRes.valid;
+                    helperText = (validationRes.valid) ? defaultPublicKeyInputText : (validationRes.error) as string
+                }
+                return (
+                    {
+                        "valid": element.valid,
+                        "value": element.value,
+                        "hasError": hasError,
+                        "helperText": helperText
+                    }
+                )
+            }
+        )
+        setPublicKeyObjArray(validatedPublicKeyObjArray);
+        const hasErrorArray = validatedPublicKeyObjArray.map((ele) => ele.hasError);
+
+        if (hasErrorArray.some((e) => { return e })) {
+            return
+        }
+
         let pubKeys = publicKeyObjArray.filter(element => element.valid && element.value).map(
             (element) => {
                 return element.value
             }
         )
+        const signatureNumberValidation = isAmountSignatureProper(parseInt(signatureNumber, 10), pubKeys);
+
+        if (! signatureNumberValidation.valid) {
+            setSignatureNumberError(true);
+            setSignatureNumberHelperText((signatureNumberValidation.error) as string)
+            return
+        }
+
         const reedemScript = generateRedeemScript(pubKeys, parseInt(signatureNumber));
         const address = generateMultiSigAddress(reedemScript)
         setAddress(address);
@@ -49,7 +94,6 @@ const MultiSigGenerator: React.FC = () => {
         newPublicKeyElement.valid = false;
         newPublicKeyObjArray[publicKeyElementId] = newPublicKeyElement;
         setPublicKeyObjArray(newPublicKeyObjArray);
-        return
     }
 
     const updatePublicKeyObjArray = (event: React.ChangeEvent<HTMLInputElement>, publicKeyElementId: number) => {
@@ -70,6 +114,8 @@ const MultiSigGenerator: React.FC = () => {
                     key={index.toString()}
                     publicKeyElementValue={element.value}
                     updatePublicKeyObjArray={updatePublicKeyObjArray}
+                    hasError={element.hasError}
+                    helperText={element.helperText}
                 />
             )
         }
@@ -94,12 +140,14 @@ const MultiSigGenerator: React.FC = () => {
                     <Grid container className="form-field">
                         <Grid item >
                             <TextField
+                                error={signatureNumberError}
                                 id="standard-select-currency"
                                 select
                                 label="Amount of Signatures"
                                 value={signatureNumber}
                                 onChange={handleChange}
-                                helperText="Amount of signatures required to release the coins">
+                                helperText={signatureNumberHelperText}
+                            >
                                 {signatureNumberOptions.map((option) => (
                                     <MenuItem key={option} value={option}>
                                         {option}
