@@ -107,10 +107,11 @@ const MultiSigGenerator: React.FC = () => {
         setPublicKeyObjArray(newPublicKeyObjArray);
     }
 
-    const publicKeyElement = publicKeyObjArray.filter(element => element.valid).map(
+    const publicKeyElement = publicKeyObjArray.map(
         (element, index) => {
-            return (
-                <PublicKeyInput
+            let inputControl = <></>
+            if (element.valid) {
+                inputControl = <PublicKeyInput
                     publicKeyElementId={index}
                     insertPublicKeyElement={insertPublicKeyElement}
                     makePublicKeyElementInvalid={makePublicKeyElementInvalid}
@@ -120,7 +121,10 @@ const MultiSigGenerator: React.FC = () => {
                     hasError={element.hasError}
                     helperText={element.helperText}
                 />
-            )
+                return (
+                    inputControl
+                )
+            }
         }
     );
 
