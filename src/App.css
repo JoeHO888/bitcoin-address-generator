@@ -5,6 +5,18 @@
   text-align: center;
 }
 
+.home {
+  margin-left: 10%;
+  margin-right: 10%;
+  margin-bottom: 20%;
+  text-align: center;
+}
+
+.card {
+  width:80%;
+  margin: auto;
+}
+
 .form-field {
   margin-top: 10px;
   margin-bottom: 10px;
