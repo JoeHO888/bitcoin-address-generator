@@ -8,7 +8,6 @@ import { generateMultiSigAddress, generateRedeemScript } from "../../utils";
 import { PublicKeyInput } from "./PublicKeyInput";
 import { routes } from "../../routes";
 import {
-    isValidCompressedPublicKey,
     isAmountSignatureProper,
     validatePublicKeyObjArray
 } from "../../utils";
