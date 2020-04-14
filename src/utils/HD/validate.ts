@@ -4,10 +4,22 @@ type seedValidation = {
     error?: string
 }
 
+const isStringHexadecimal = (string: string): boolean => {
+    const hexFormat = parseInt(string, 16)
+    return (hexFormat.toString(16) === string)
+}
+
 const isMasterKeySeedValid = (seed: string): seedValidation => {
-    const seedBuffer: Buffer = Buffer.from(seed, "hex")
 
     let validationRes: seedValidation = { valid: true }
+
+    if (!isStringHexadecimal(seed)) {
+        validationRes.valid = false
+        validationRes.error = "Please provide hexadecimal string";
+        return validationRes
+    }
+
+    const seedBuffer: Buffer = Buffer.from(seed, "hex")
 
     if (seedBuffer.length < 16) {
         validationRes.valid = false
