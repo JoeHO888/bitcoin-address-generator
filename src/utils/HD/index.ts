@@ -1,4 +1,5 @@
 import { deriveHDSegWitAddress } from "./hd";
+import {generateSeed} from "./generate"
 
 import {
     isMasterKeySeedValid,
@@ -12,3 +13,6 @@ export {
     isDerivedPathValid
 };
 
+export{
+    generateSeed
+}

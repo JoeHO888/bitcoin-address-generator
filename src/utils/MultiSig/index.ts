@@ -9,10 +9,16 @@ import {
     validatePublicKeyObjArray
 } from "./validate"
 
+
+import {
+    generateCompressedPublicKey
+} from "./generate"
+
 export {
     generateMultiSigAddress,
     generateRedeemScript,
     isValidCompressedPublicKey,
     isAmountSignatureProper,
-    validatePublicKeyObjArray
+    validatePublicKeyObjArray,
+    generateCompressedPublicKey
 };

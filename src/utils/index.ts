@@ -3,25 +3,30 @@ import {
     generateRedeemScript,
     isValidCompressedPublicKey,
     isAmountSignatureProper,
-    validatePublicKeyObjArray
+    validatePublicKeyObjArray,
+    generateCompressedPublicKey
 } from "./MultiSig";
 
 import {
     deriveHDSegWitAddress,
     isMasterKeySeedValid,
-    isDerivedPathValid
+    isDerivedPathValid,
+    generateSeed
 } from "./HD";
+
 
 export {
     generateMultiSigAddress,
     generateRedeemScript,
     isValidCompressedPublicKey,
     isAmountSignatureProper,
-    validatePublicKeyObjArray
+    validatePublicKeyObjArray,
+    generateCompressedPublicKey
 };
 
 export {
     deriveHDSegWitAddress,
     isMasterKeySeedValid,
-    isDerivedPathValid
+    isDerivedPathValid,
+    generateSeed
 }
