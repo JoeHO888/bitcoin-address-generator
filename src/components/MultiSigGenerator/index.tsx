@@ -88,19 +88,22 @@ const MultiSigGenerator: React.FC = () => {
         setPublicKeyObjArray(newPublicKeyObjArray);
     }
 
-    const publicKeyElement = publicKeyObjArray.map(
+    const publicKeyControls = publicKeyObjArray.map(
         (element, index) => {
             let inputControl = <div key={index.toString()}></div>
+            const attributes = {
+                Id: index,
+                value: element.value,
+                hasError: element.hasError,
+                helperText: element.helperText
+            }
             if (element.valid) {
                 inputControl = <PublicKeyInput
-                    publicKeyElementId={index}
+                    publicKeyElementAttributes={attributes}
+                    key={index.toString()}
                     insertPublicKeyElement={insertPublicKeyElement}
                     makePublicKeyElementInvalid={makePublicKeyElementInvalid}
-                    key={index.toString()}
-                    publicKeyElementValue={element.value}
                     updatePublicKeyObjArray={updatePublicKeyObjArray}
-                    hasError={element.hasError}
-                    helperText={element.helperText}
                 />
             }
             return (
@@ -124,7 +127,7 @@ const MultiSigGenerator: React.FC = () => {
             </h3>
             <form noValidate autoComplete="off">
                 <Grid container>
-                    {publicKeyElement}
+                    {publicKeyControls}
                     <Grid container className="form-field">
                         <Grid item >
                             <TextField

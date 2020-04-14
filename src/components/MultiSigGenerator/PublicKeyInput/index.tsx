@@ -6,19 +6,29 @@ import { green } from '@material-ui/core/colors';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 
-type publicKeyElementProps = {
-    publicKeyElementId: number;
-    key: string;
-    publicKeyElementValue: string;
+type PublicKeyElementAttributes = {
+    Id: number;
+    value: string;
     hasError: boolean;
     helperText: string;
+}
+
+type publicKeyElementProps = {
+    publicKeyElementAttributes: PublicKeyElementAttributes;
     insertPublicKeyElement: (publicKeyElementId: number) => void;
     makePublicKeyElementInvalid: (publicKeyElementId: number) => void;
-    updatePublicKeyObjArray: (event: React.ChangeEvent<HTMLInputElement>, publicKeyElementId: number) => void;
+    updatePublicKeyObjArray: (
+        event: React.ChangeEvent<HTMLInputElement>,
+        publicKeyElementId: number,
+    ) => void;
 }
 
 const PublicKeyInput: React.FC<publicKeyElementProps> = (publicKeyElementProps) => {
-    const publicKeyElementId = publicKeyElementProps.publicKeyElementId;
+    const publicKeyElementId = publicKeyElementProps.publicKeyElementAttributes.Id
+    const value = publicKeyElementProps.publicKeyElementAttributes.value
+    const hasError = publicKeyElementProps.publicKeyElementAttributes.hasError
+    const helperText = publicKeyElementProps.publicKeyElementAttributes.helperText
+
     const insertPublicKeyElement = () => {
         publicKeyElementProps.insertPublicKeyElement(publicKeyElementId);
     }
@@ -27,15 +37,10 @@ const PublicKeyInput: React.FC<publicKeyElementProps> = (publicKeyElementProps) 
         publicKeyElementProps.makePublicKeyElementInvalid(publicKeyElementId);
     }
 
-    const updatePublicKeyObjArray = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const updateAttribute = (event: React.ChangeEvent<HTMLInputElement>) => {
         publicKeyElementProps.updatePublicKeyObjArray(event, publicKeyElementId);
     }
 
-    const value = publicKeyElementProps.publicKeyElementValue;
-
-    const hasError = publicKeyElementProps.hasError;
-
-    const helperText = publicKeyElementProps.helperText;
     return (
         <Grid container className="form-field">
             <Grid item xs={11}>
@@ -46,7 +51,7 @@ const PublicKeyInput: React.FC<publicKeyElementProps> = (publicKeyElementProps) 
                     helperText={helperText}
                     margin="normal"
                     id={publicKeyElementId.toString()}
-                    onChange={updatePublicKeyObjArray}
+                    onChange={updateAttribute}
                     value={value}
                     label="Compressed Public Key" />
             </Grid>
