@@ -59,13 +59,13 @@ const isAmountSignatureProper = (m: number, pubKeys: string[]): signatureAmountV
 
     if (m > pubKeys.length) {
         validationResult.valid = false
-        validationResult.error = "Amount of signature should be less than total number of public keys."
+        validationResult.error = "Amount of signature should not be more than total number of public keys."
         return validationResult
     }
 
     if (m > 20) {
         validationResult.valid = false
-        validationResult.error = "Amount of signature should be less than 20."
+        validationResult.error = "Amount of signature should not be more than 20."
         return validationResult
     }
 
