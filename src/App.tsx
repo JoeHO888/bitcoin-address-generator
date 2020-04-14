@@ -11,6 +11,7 @@ import {
 import { HDGenerator } from "./components/HDGenerator";
 import { Home } from "./components/Home";
 import { MultiSigGenerator } from "./components/MultiSigGenerator";
+import { routes } from "./routes";
 
 function App() {
   return (
@@ -19,13 +20,13 @@ function App() {
         <Header />
         <div className="App-body">
           <Switch>
-            <Route exact path="/multisig-generator">
+            <Route exact path={routes.multiSig.route}>
               <MultiSigGenerator />
             </Route>
-            <Route exact path="/hd-generator">
+            <Route exact path={routes.hdSegWit.route}>
               <HDGenerator />
             </Route>
-            <Route path="/">
+            <Route path={routes.home.route}>
               <Home />
             </Route>
           </Switch>
