@@ -38,6 +38,10 @@ const HDGenerator: React.FC = () => {
 
     const onSubmit = (event: React.MouseEvent<HTMLElement>) => {
         event.preventDefault();
+        setSeedHasError(false);
+        setPathHasError(false);
+        setSeedHelperText(defaultSeedHelperText);
+        setPathHelperText(defaultPathHelperText);
         const seedValidation = isMasterKeySeedValid(seed);
         const pathValidation = isDerivedPathValid(path);
 
@@ -50,13 +54,8 @@ const HDGenerator: React.FC = () => {
         else if (!pathValidation.valid) {
             setPathHasError(true);
             setPathHelperText((pathValidation.error) as string)
-        // Try to Derive Child Key
+            // Try to Derive Child Key
         } else {
-            setSeedHasError(false);
-            setPathHasError(false);
-            setSeedHelperText(defaultSeedHelperText)
-            setPathHelperText(defaultPathHelperText)
-
             const derivedAddress = deriveHDSegWitAddress(seed, path);
 
             // Invalid Child Key
