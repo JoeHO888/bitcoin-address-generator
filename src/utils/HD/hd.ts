@@ -85,8 +85,8 @@ const deriveHDSegWitAddress = (seed: string, derivedPath: string):derivedSegWitI
         return derivedSegWitInfo
     }
 
-
-    derivedSegWitInfo.address = "Placeholder";
+    const derivedNodePublicKey = (nodeDerived as BIP32).publicKey.toString("hex");
+    derivedSegWitInfo.address = (convertToSegwit(derivedNodePublicKey) as string);
     return derivedSegWitInfo
 }
 
