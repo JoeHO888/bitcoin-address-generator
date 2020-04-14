@@ -30,7 +30,6 @@ describe('Hexadecimal', () => {
 
     test('Hexadecimal - Success', () => {
         const expectedRes = true
-        console.log(expectedRes);
         const string = "ff";
 
         const res = isStringHexadecimal(string)
