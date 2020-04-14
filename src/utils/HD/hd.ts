@@ -2,6 +2,12 @@ import * as ecc from "tiny-secp256k1";
 import { isDerivedPathValid } from "./validate"
 import { BIP32, generate_master_key } from "./bip32";
 
+
+type nodeParameter = {
+    index: number;
+    ishardended: boolean;
+}
+
 const isMasterKeyPairValid = (masterExtendedKeyPair: [Buffer, Buffer]): boolean => {
     const IL = masterExtendedKeyPair[0]
     return ecc.isPrivate(IL);
@@ -22,6 +28,23 @@ const pathToNodeParamtersArray = (derivedPath: string) => {
             }
         )
     )
+}
+
+const deriveNode = (childNodeParameterArray: nodeParameter[], masterNode: BIP32): BIP32 | null => {
+    // Current Node is not null
+    let currentNode: BIP32 | null = masterNode;
+
+    for (let childNodeIndex = 0; childNodeIndex < childNodeParameterArray.length; childNodeIndex++) {
+        let nodeIndex = childNodeParameterArray[childNodeIndex].index
+        let ishardended = childNodeParameterArray[childNodeIndex].ishardended
+        currentNode = (currentNode as BIP32).derive(nodeIndex, ishardended)
+
+        if (currentNode == null) {
+            return null
+        }
+    }
+
+    return currentNode
 }
 
 const deriveHDSegWitAddress = (seed: string, derivedPath: string) => {
@@ -48,8 +71,9 @@ const deriveHDSegWitAddress = (seed: string, derivedPath: string) => {
 
     const nodeParameterArray = pathToNodeParamtersArray(derivedPath);
 
-
     // Derive Node
+    
+    const nodeDerived = deriveNode(nodeParameterArray, masterNode);
 
     return
 }
