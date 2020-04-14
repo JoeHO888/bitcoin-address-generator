@@ -8,17 +8,12 @@ import { generateMultiSigAddress, generateRedeemScript } from "../../utils";
 import { PublicKeyInput } from "./PublicKeyInput";
 import { routes } from "../../routes";
 import { isValidCompressedPublicKey, isAmountSignatureProper } from "../../utils";
-
-const signatureNumberOptions = Array.from(Array(21).keys()).slice(1);
-const defaultPublicKeyInputText = "It starts from 02 or 03";
-const initialPublicKeyElement = {
-    "valid": true,
-    "value": "",
-    "hasError": false,
-    "helperText": defaultPublicKeyInputText
-};
-
-const defaultSignatureNumberHelperText = "Amount of signatures required to release the coins";
+import {
+    signatureNumberOptions,
+    defaultPublicKeyInputText,
+    initialPublicKeyElement,
+    defaultSignatureNumberHelperText
+} from "../../constant";
 
 const MultiSigGenerator: React.FC = () => {
     const [address, setAddress] = useState("");
@@ -70,7 +65,7 @@ const MultiSigGenerator: React.FC = () => {
         )
         const signatureNumberValidation = isAmountSignatureProper(parseInt(signatureNumber, 10), pubKeys);
 
-        if (! signatureNumberValidation.valid) {
+        if (!signatureNumberValidation.valid) {
             setSignatureNumberError(true);
             setSignatureNumberHelperText((signatureNumberValidation.error) as string)
             return
