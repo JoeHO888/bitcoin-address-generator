@@ -12,6 +12,7 @@ import {
 
 const defaultSeedHelperText = "It should be between 128 and 512 bits"
 const defaultPathHelperText = "Format: m/number/number'/..., ' to denoate hardended child key"
+const defaultAddressHelperText = "Encoded in P2WPKH, a native SegWit version"
 
 const HDGenerator: React.FC = () => {
 
@@ -24,6 +25,8 @@ const HDGenerator: React.FC = () => {
     const [pathHelperText, setPathHelperText] = useState(defaultPathHelperText);
 
     const [address, setAddress] = useState("");
+    const [addressHasError, setAddressHasError] = useState(false);
+    const [addressHelperText, setAddressHelperText] = useState(defaultAddressHelperText);
 
     const handleSeedChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSeed(event.target.value);
@@ -38,15 +41,30 @@ const HDGenerator: React.FC = () => {
         const seedValidation = isMasterKeySeedValid(seed);
         const pathValidation = isDerivedPathValid(path);
 
+        // Valid Seed
         if (!seedValidation.valid) {
             setSeedHasError(true);
             setSeedHelperText((seedValidation.error) as string)
-        }
-        else if (!pathValidation.valid){
+
+        }// Valid Path
+        else if (!pathValidation.valid) {
             setPathHasError(true);
-            setSeedHelperText((seedValidation.error) as string)
-        }else{
+            setPathHelperText((pathValidation.error) as string)
+        // Try to Derive Child Key
+        } else {
+            setSeedHasError(false);
+            setPathHasError(false);
+            setSeedHelperText(defaultSeedHelperText)
+            setPathHelperText(defaultPathHelperText)
+
             const derivedAddress = deriveHDSegWitAddress(seed, path);
+
+            // Invalid Child Key
+            if (!derivedAddress.address) {
+                setAddressHasError(true)
+                setAddressHelperText((derivedAddress.error) as string)
+            }
+
             setAddress((derivedAddress.address) as string);
         }
     }
@@ -110,8 +128,9 @@ const HDGenerator: React.FC = () => {
                 <Grid container className="form-field">
                     <Grid item xs={12}>
                         <TextField
+                            error={addressHasError}
                             disabled
-                            helperText="Encoded in P2WPKH, a native SegWit version"
+                            helperText={addressHelperText}
                             fullWidth
                             value={address}
                             margin="normal" id="address" label="HD P2WPKH Address" />
