@@ -148,7 +148,7 @@ const MultiSigGenerator: React.FC = () => {
                         <Grid item >
                             <TextField
                                 error={signatureNumberError}
-                                id="standard-select-currency"
+                                id="signatureNumber"
                                 select
                                 label="Amount of Signatures"
                                 value={signatureNumber}
