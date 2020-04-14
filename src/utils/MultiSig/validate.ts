@@ -1,6 +1,6 @@
 import * as ecc from "tiny-secp256k1";
 
-import {isStringHexadecimal} from "../Common";
+import { isStringHexadecimal } from "../Common";
 
 import {
     compressedPublicKeyPrefix_1,
@@ -57,14 +57,22 @@ type signatureAmountValidation = {
 const isAmountSignatureProper = (m: number, pubKeys: string[]): signatureAmountValidation => {
     const validationResult: signatureAmountValidation = { valid: true };
 
-    if (m < 1 && m > pubKeys.length) {
+    if (m > pubKeys.length) {
         validationResult.valid = false
-        validationResult.error = "Amount of Signature should be less than total number of public keys."
+        validationResult.error = "Amount of signature should be less than total number of public keys."
+        return validationResult
     }
 
-    if (m < 1 && m > 20) {
-        validationResult.valid = true
-        validationResult.error = "Amount of Signature should be less than 20."
+    if (m > 20) {
+        validationResult.valid = false
+        validationResult.error = "Amount of signature should be less than 20."
+        return validationResult
+    }
+
+    if (m < 1) {
+        validationResult.valid = false
+        validationResult.error = "At least one signature is needed."
+        return validationResult
     }
     return validationResult;
 }
