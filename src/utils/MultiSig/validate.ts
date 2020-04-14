@@ -77,7 +77,39 @@ const isAmountSignatureProper = (m: number, pubKeys: string[]): signatureAmountV
     return validationResult;
 }
 
+type publicKeyObj = {
+    valid: boolean;
+    value: string;
+    hasError: boolean;
+    helperText: string
+}
+
+const validatePublicKeyObjArray = (publicKeyObjArray: publicKeyObj[], defaultPublicKeyInputText: string): publicKeyObj[] => {
+    const validatePublicKeyObjArray = publicKeyObjArray.map(
+        (element) => {
+            let hasError = false;
+            let helperText = defaultPublicKeyInputText;
+            if (element.value) {
+                const validationRes = isValidCompressedPublicKey(element.value);
+                hasError = !validationRes.valid;
+                helperText = (validationRes.valid) ? defaultPublicKeyInputText : (validationRes.error) as string
+            }
+            return (
+                {
+                    "valid": element.valid,
+                    "value": element.value,
+                    "hasError": hasError,
+                    "helperText": helperText
+                }
+            )
+        }
+    )
+
+    return validatePublicKeyObjArray
+}
+
 export {
     isValidCompressedPublicKey,
-    isAmountSignatureProper
+    isAmountSignatureProper,
+    validatePublicKeyObjArray
 }

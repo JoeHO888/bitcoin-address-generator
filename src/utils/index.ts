@@ -2,7 +2,8 @@ import {
     generateMultiSigAddress,
     generateRedeemScript,
     isValidCompressedPublicKey,
-    isAmountSignatureProper
+    isAmountSignatureProper,
+    validatePublicKeyObjArray
 } from "./MultiSig";
 
 import {
@@ -16,6 +17,7 @@ export {
     generateRedeemScript,
     isValidCompressedPublicKey,
     isAmountSignatureProper,
+    validatePublicKeyObjArray
 };
 
 export {

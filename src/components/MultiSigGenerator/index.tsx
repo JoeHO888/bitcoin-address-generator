@@ -7,7 +7,11 @@ import Grid from '@material-ui/core/Grid';
 import { generateMultiSigAddress, generateRedeemScript } from "../../utils";
 import { PublicKeyInput } from "./PublicKeyInput";
 import { routes } from "../../routes";
-import { isValidCompressedPublicKey, isAmountSignatureProper } from "../../utils";
+import {
+    isValidCompressedPublicKey,
+    isAmountSignatureProper,
+    validatePublicKeyObjArray
+} from "../../utils";
 import {
     signatureNumberOptions,
     defaultPublicKeyInputText,
@@ -31,26 +35,9 @@ const MultiSigGenerator: React.FC = () => {
         event.preventDefault();
         setSignatureNumberError(false);
         setSignatureNumberHelperText(defaultSignatureNumberHelperText);
+        
+        const validatedPublicKeyObjArray = validatePublicKeyObjArray(publicKeyObjArray,defaultPublicKeyInputText);
 
-        const validatedPublicKeyObjArray = publicKeyObjArray.map(
-            (element) => {
-                let hasError = false;
-                let helperText = defaultPublicKeyInputText;
-                if (element.value) {
-                    const validationRes = isValidCompressedPublicKey(element.value);
-                    hasError = !validationRes.valid;
-                    helperText = (validationRes.valid) ? defaultPublicKeyInputText : (validationRes.error) as string
-                }
-                return (
-                    {
-                        "valid": element.valid,
-                        "value": element.value,
-                        "hasError": hasError,
-                        "helperText": helperText
-                    }
-                )
-            }
-        )
         setPublicKeyObjArray(validatedPublicKeyObjArray);
         const hasErrorArray = validatedPublicKeyObjArray.map((ele) => ele.hasError);
 

@@ -5,12 +5,14 @@ import {
 
 import {
     isValidCompressedPublicKey,
-    isAmountSignatureProper
+    isAmountSignatureProper,
+    validatePublicKeyObjArray
 } from "./validate"
 
 export {
     generateMultiSigAddress,
     generateRedeemScript,
     isValidCompressedPublicKey,
-    isAmountSignatureProper
+    isAmountSignatureProper,
+    validatePublicKeyObjArray
 };
