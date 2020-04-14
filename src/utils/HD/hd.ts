@@ -7,6 +7,23 @@ const isMasterKeyPairValid = (masterExtendedKeyPair: [Buffer, Buffer]): boolean 
     return ecc.isPrivate(IL);
 }
 
+const pathToNodeParamtersArray = (derivedPath: string) => {
+    const childNodePath = derivedPath.split("/").slice(1);
+    
+    return (
+        childNodePath.map(
+            (childNodeNotation) => {
+                if (childNodeNotation.slice(-1) === "'") {
+                    return { index: parseInt(childNodeNotation.slice(0, -1), 10), ishardended: true }
+                }
+                else {
+                    return { index: parseInt(childNodeNotation, 10), ishardended: false }
+                }
+            }
+        )
+    )
+}
+
 const deriveHDSegWitAddress = (seed: string, derivedPath: string) => {
 
     // check path valid
@@ -26,8 +43,10 @@ const deriveHDSegWitAddress = (seed: string, derivedPath: string) => {
     // Create Master Node
 
     const masterNode = new BIP32(masterExtendedKeyPair[0], masterExtendedKeyPair[1]);
-    
+
     // Parse Path
+
+    const nodeParameterArray = pathToNodeParamtersArray(derivedPath);
 
 
     // Derive Node
