@@ -26,7 +26,8 @@ const polymod = (values: number[]): number => {
   let chk: number = 1;
   for (let p: number = 0; p < values.length; ++p) {
     let top: number = chk >> 25;
-    chk = (chk & 0x1ffffff) << 5 ^ values[p];
+    chk = (chk & 0x1ffffff) << 5;
+    chk = chk ^ values[p];
     for (let i: number = 0; i < 5; ++i) {
       if ((top >> i) & 1) {
         chk ^= GENERATOR[i];

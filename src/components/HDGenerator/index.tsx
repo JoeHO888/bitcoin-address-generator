@@ -78,7 +78,7 @@ const HDGenerator: React.FC = () => {
                 {routes.hdSegWit.description}
             </h2>
             <h3>
-                <a href={routes.hdSegWit.methodologyURL} target="_blank">
+                <a href={routes.hdSegWit.methodologyURL} target="_blank" rel="noopener noreferrer">
                     How is it generated?
                 </a>
             </h3>
