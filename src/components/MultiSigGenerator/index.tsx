@@ -13,6 +13,7 @@ const initialPublicKeyElement = { "valid": true, "value": "" };
 
 const MultiSigGenerator: React.FC = () => {
     const [address, setAddress] = useState("");
+    const [redeemScript, setRedeemScript] = useState("");
     const [publicKeyObjArray, setPublicKeyObjArray] = useState([initialPublicKeyElement]);
     const [signatureNumber, setSignatureNumber] = useState("2");
 
@@ -30,6 +31,7 @@ const MultiSigGenerator: React.FC = () => {
         const reedemScript = generateRedeemScript(pubKeys, parseInt(signatureNumber));
         const address = generateMultiSigAddress(reedemScript)
         setAddress(address);
+        setRedeemScript(reedemScript.toString("hex"));
     }
 
     const insertPublicKeyElement = (publicKeyElementId: number): void => {
@@ -127,6 +129,20 @@ const MultiSigGenerator: React.FC = () => {
                                 margin="normal"
                                 id="address"
                                 label="P2SH Address" />
+                        </Grid>
+                    </Grid>
+                    <Grid container className="form-field">
+                        <Grid item xs={12}>
+                            <TextField
+                                disabled
+                                helperText="P2SH Redeem Script"
+                                fullWidth
+                                value={redeemScript}
+                                margin="normal"
+                                id="redeemScript"
+                                multiline
+                                rowsMax={4}
+                                label="Redeem Script" />
                         </Grid>
                     </Grid>
                 </Grid>
