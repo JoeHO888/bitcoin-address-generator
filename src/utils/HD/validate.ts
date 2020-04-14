@@ -22,6 +22,27 @@ const isMasterKeySeedValid = (seed: string): seedValidation => {
     return validationRes
 }
 
+type derivedPathValidation = {
+    valid: boolean;
+    error?: string
+}
+
+const isDerivedPathValid = (path: string): derivedPathValidation => {
+
+    let validationRes: derivedPathValidation = { valid: true }
+
+    const pattern = new RegExp(/m(\/([0-9]+'{0,1}))*$/, "i")
+    // const pattern = new RegExp("m(\/([0-9]+'{0,1}))*$");
+
+    if (!pattern.test(path)) {
+        validationRes.valid = false
+        validationRes.error = "Invalid Path, path should be something like m/15'/2";
+    }
+
+    return validationRes
+}
+
 export {
     isMasterKeySeedValid,
+    isDerivedPathValid
 }
