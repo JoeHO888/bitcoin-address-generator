@@ -1,7 +1,12 @@
 import * as ecc from "tiny-secp256k1";
 import { isDerivedPathValid } from "./validate"
 import { BIP32, generate_master_key } from "./bip32";
+import { convertToSegwit } from "./SegWit";
 
+type derivedSegWitInfo = {
+    address?: string;
+    error?: string;
+}
 
 type nodeParameter = {
     index: number;
@@ -47,35 +52,42 @@ const deriveNode = (childNodeParameterArray: nodeParameter[], masterNode: BIP32)
     return currentNode
 }
 
-const deriveHDSegWitAddress = (seed: string, derivedPath: string) => {
+const deriveHDSegWitAddress = (seed: string, derivedPath: string):derivedSegWitInfo => {
+    const derivedSegWitInfo: derivedSegWitInfo = {};
 
     // check path valid
     const derivedPathValidation = isDerivedPathValid(derivedPath);
-
+    if (!derivedPathValidation.valid) {
+        derivedSegWitInfo.error = derivedPathValidation.error
+        return derivedSegWitInfo
+    }
+    
     // Check this seed can generate valid master key
     const masterExtendedKeyPair = generate_master_key(seed);
 
     if (!isMasterKeyPairValid(masterExtendedKeyPair)) {
-
         // Create error message
-
+        derivedSegWitInfo.error = "This seed cannot generate valid master key."
         // Return null node
-
+        return derivedSegWitInfo
     }
 
     // Create Master Node
-
     const masterNode = new BIP32(masterExtendedKeyPair[0], masterExtendedKeyPair[1]);
 
     // Parse Path
-
     const nodeParameterArray = pathToNodeParamtersArray(derivedPath);
 
     // Derive Node
-    
     const nodeDerived = deriveNode(nodeParameterArray, masterNode);
+    if (nodeDerived == null) {
+        derivedSegWitInfo.error = "This path is unable to generate a valid child key."
+        return derivedSegWitInfo
+    }
 
-    return
+
+    derivedSegWitInfo.address = "Placeholder";
+    return derivedSegWitInfo
 }
 
 export {
