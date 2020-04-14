@@ -4,12 +4,25 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 
 import { routes } from "../../routes";
-import { deriveHDSegWitAddress } from "../../utils";
+import {
+    deriveHDSegWitAddress,
+    isMasterKeySeedValid,
+    isDerivedPathValid
+} from "../../utils";
+
+const defaultSeedHelperText = "It should be between 128 and 512 bits"
+const defaultPathHelperText = "Format: m/number/number'/..., ' to denoate hardended child key"
 
 const HDGenerator: React.FC = () => {
 
     const [seed, setSeed] = useState("");
+    const [seedHasError, setSeedHasError] = useState(false);
+    const [seedHelperText, setSeedHelperText] = useState(defaultSeedHelperText);
+
     const [path, setPath] = useState("");
+    const [pathHasError, setPathHasError] = useState(false);
+    const [pathHelperText, setPathHelperText] = useState(defaultPathHelperText);
+
     const [address, setAddress] = useState("");
 
     const handleSeedChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -22,8 +35,20 @@ const HDGenerator: React.FC = () => {
 
     const onSubmit = (event: React.MouseEvent<HTMLElement>) => {
         event.preventDefault();
-        const derivedAddress = deriveHDSegWitAddress(seed, path);
-        setAddress((derivedAddress.address) as string);
+        const seedValidation = isMasterKeySeedValid(seed);
+        const pathValidation = isDerivedPathValid(path);
+
+        if (!seedValidation.valid) {
+            setSeedHasError(true);
+            setSeedHelperText((seedValidation.error) as string)
+        }
+        else if (!pathValidation.valid){
+            setPathHasError(true);
+            setSeedHelperText((seedValidation.error) as string)
+        }else{
+            const derivedAddress = deriveHDSegWitAddress(seed, path);
+            setAddress((derivedAddress.address) as string);
+        }
     }
 
     return (
@@ -39,12 +64,13 @@ const HDGenerator: React.FC = () => {
                     How is it generated?
                 </a>
             </h3>
-            <form noValidate autoComplete="off">
+            <form autoComplete="off">
                 <Grid container className="form-field">
                     <Grid item xs={12}>
                         <TextField
+                            error={seedHasError}
                             placeholder="Seed to generate HD address"
-                            helperText="It should be between 128 and 512 bits"
+                            helperText={seedHelperText}
                             fullWidth
                             value={seed}
                             onChange={handleSeedChange}
@@ -57,8 +83,9 @@ const HDGenerator: React.FC = () => {
                 <Grid container className="form-field">
                     <Grid item xs={12}>
                         <TextField
+                            error={pathHasError}
                             placeholder="Example: m/123'/456"
-                            helperText="Format: m/number/number'/..., ' to denoate hardended child key"
+                            helperText={pathHelperText}
                             fullWidth
                             value={path}
                             onChange={handlePathChange}
