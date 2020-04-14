@@ -76,7 +76,7 @@ const encodeBech32String = (hrp: string, data: number[]): string => {
   return ret;
 }
 
-interface DecodedString {
+export interface DecodedString {
   hrp: string;
   data: number[];
 }
@@ -121,7 +121,5 @@ const decodeBech32String = (bechString: string): DecodedString | null => {
 
 export {
   decodeBech32String,
-  encodeBech32String
+  encodeBech32String,
 };
-
-export type { DecodedString };
