@@ -34,6 +34,9 @@ const MultiSigGenerator: React.FC = () => {
 
     const onSubmit = (event: React.MouseEvent<HTMLElement>) => {
         event.preventDefault();
+        setSignatureNumberError(false);
+        setSignatureNumberHelperText(defaultSignatureNumberHelperText);
+
         const validatedPublicKeyObjArray = publicKeyObjArray.map(
             (element) => {
                 let hasError = false;
