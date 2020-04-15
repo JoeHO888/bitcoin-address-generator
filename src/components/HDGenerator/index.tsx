@@ -107,7 +107,7 @@ const HDGenerator: React.FC = () => {
                             label="Seed" />
                     </Grid>
                 </Grid>
-                
+
                 <Grid container>
                     <Grid item >
                         <Button
@@ -115,7 +115,7 @@ const HDGenerator: React.FC = () => {
                             variant="outlined"
                             color="primary"
                             onClick={onGenerate}>
-                            Generate
+                            Random Seed
                         </Button>
                     </Grid>
                 </Grid>
