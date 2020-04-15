@@ -94,7 +94,7 @@ const HDGenerator: React.FC = () => {
             </h3>
             <form autoComplete="off">
                 <Grid container className="form-field">
-                    <Grid item xs={11}>
+                    <Grid item xs={12}>
                         <TextField
                             error={seedHasError}
                             placeholder="Seed to generate HD address"
@@ -106,7 +106,10 @@ const HDGenerator: React.FC = () => {
                             id="seed"
                             label="Seed" />
                     </Grid>
-                    <Grid item xs={1}>
+                </Grid>
+                
+                <Grid container>
+                    <Grid item >
                         <Button
                             type="button"
                             variant="outlined"
