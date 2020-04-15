@@ -36,19 +36,22 @@ const MultiSigGenerator: React.FC = () => {
         setSignatureNumberHelperText(defaultSignatureNumberHelperText);
 
         const validatedPublicKeyObjArray = validatePublicKeyObjArray(publicKeyObjArray, defaultPublicKeyInputText);
-
         setPublicKeyObjArray(validatedPublicKeyObjArray);
-        const hasErrorArray = validatedPublicKeyObjArray.map((ele) => ele.hasError);
+
+        const usedPublicKeyObjArray = validatedPublicKeyObjArray.filter(element => element.valid && element.value)
+
+        const hasErrorArray = usedPublicKeyObjArray.map((ele) => ele.hasError);
 
         if (hasErrorArray.some((e) => { return e })) {
             return
         }
-
-        let pubKeys = publicKeyObjArray.filter(element => element.valid && element.value).map(
+        
+        let pubKeys = usedPublicKeyObjArray.filter(element => element.valid && element.value).map(
             (element) => {
                 return element.value
             }
         )
+        
         const signatureNumberValidation = isAmountSignatureProper(parseInt(signatureNumber, 10), pubKeys);
 
         if (!signatureNumberValidation.valid) {
