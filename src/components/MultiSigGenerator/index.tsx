@@ -34,32 +34,40 @@ const MultiSigGenerator: React.FC = () => {
         event.preventDefault();
         setSignatureNumberError(false);
         setSignatureNumberHelperText(defaultSignatureNumberHelperText);
-
+    
+        // Validate All Public Key Objects
         const validatedPublicKeyObjArray = validatePublicKeyObjArray(publicKeyObjArray, defaultPublicKeyInputText);
         setPublicKeyObjArray(validatedPublicKeyObjArray);
-
+    
+        // Extract using (valid/non-empty) Public Key Objects
         const usedPublicKeyObjArray = validatedPublicKeyObjArray.filter(element => element.valid && element.value)
-
+    
+        // Check Error in those using Public Key Objects
         const hasErrorArray = usedPublicKeyObjArray.map((ele) => ele.hasError);
-
+    
+        // Terminate Generation if using Public Key Objects have error
         if (hasErrorArray.some((e) => { return e })) {
             return
         }
         
+        // Extract Public Key Value from those using Public Key Objects
         let pubKeys = usedPublicKeyObjArray.filter(element => element.valid && element.value).map(
             (element) => {
                 return element.value
             }
         )
         
+        // Check Number of Signatures is proper
         const signatureNumberValidation = isAmountSignatureProper(parseInt(signatureNumber, 10), pubKeys);
-
+    
+        // Terminate Generation if Number of Signatures is improper
         if (!signatureNumberValidation.valid) {
             setSignatureNumberError(true);
             setSignatureNumberHelperText((signatureNumberValidation.error) as string)
             return
         }
-
+    
+        // Generate RedeeScript & Address
         const redeemScript = generateRedeemScript(pubKeys, parseInt(signatureNumber));
         const address = generateMultiSigAddress(redeemScript)
         setAddress(address);
