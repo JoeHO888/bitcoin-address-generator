@@ -60,10 +60,10 @@ const MultiSigGenerator: React.FC = () => {
             return
         }
 
-        const reedemScript = generateRedeemScript(pubKeys, parseInt(signatureNumber));
-        const address = generateMultiSigAddress(reedemScript)
+        const redeemScript = generateRedeemScript(pubKeys, parseInt(signatureNumber));
+        const address = generateMultiSigAddress(redeemScript)
         setAddress(address);
-        setRedeemScript(reedemScript.toString("hex"));
+        setRedeemScript(redeemScript.toString("hex"));
     }
 
     const insertPublicKeyElement = (publicKeyElementId: number): void => {
