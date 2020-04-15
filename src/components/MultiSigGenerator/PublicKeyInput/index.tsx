@@ -41,7 +41,7 @@ const PublicKeyInput: React.FC<publicKeyElementProps> = (publicKeyElementProps) 
 
     const beInvalid = () => {
         let newPublicKeyElement = { ...publicKeyElementAttributes };
-        if (publicKeyElementId != 0) {
+        if (publicKeyElementId !== 0) {
             newPublicKeyElement.valid = false;
         }
 
