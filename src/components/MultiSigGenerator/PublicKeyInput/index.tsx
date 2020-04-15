@@ -5,6 +5,9 @@ import RemoveIcon from '@material-ui/icons/Remove';
 import { green } from '@material-ui/core/colors';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+
+import { generateCompressedPublicKey } from "../../../utils";
 
 export type PublicKeyElementAttributes = {
     valid: boolean;
@@ -56,21 +59,59 @@ const PublicKeyInput: React.FC<publicKeyElementProps> = (publicKeyElementProps) 
             newPublicKeyElement
         );
     }
+
+    const onGenerate = () => {
+        let newPublicKeyElement = { ...publicKeyElementAttributes };
+        let publicKey: Buffer;
+        while (true) {
+            publicKey = generateCompressedPublicKey();
+
+            if (publicKey) {
+                break
+            }
+        }
+        newPublicKeyElement.value = publicKey.toString("hex");
+        publicKeyElementProps.updatePublicKeyObjArray(
+            publicKeyElementId,
+            newPublicKeyElement
+        );
+    }
+
+
     if (valid) {
         return (
             <Grid container className="form-field">
+
                 <Grid item xs={11}>
-                    <TextField
-                        error={hasError}
-                        fullWidth
-                        placeholder="02/03"
-                        helperText={helperText}
-                        margin="normal"
-                        id={publicKeyElementId.toString()}
-                        onChange={updateValue}
-                        value={value}
-                        label="Compressed Public Key" />
+                    <Grid container>
+
+                        <Grid item xs={11}>
+                            <TextField
+                                error={hasError}
+                                fullWidth
+                                placeholder="02/03"
+                                helperText={helperText}
+                                margin="normal"
+                                id={publicKeyElementId.toString()}
+                                onChange={updateValue}
+                                value={value}
+                                label="Compressed Public Key" />
+                        </Grid>
+
+                        <Grid item>
+                            <Button
+
+                                type="button"
+                                variant="outlined"
+                                color="primary"
+                                onClick={onGenerate}>
+                                Random Key
+                            </Button>
+                        </Grid>
+
+                    </Grid>
                 </Grid>
+
                 <Grid item xs={1}>
                     <IconButton aria-label="add" style={{ color: green[500] }} onClick={insertPublicKeyElement}>
                         <AddIcon />
@@ -79,6 +120,7 @@ const PublicKeyInput: React.FC<publicKeyElementProps> = (publicKeyElementProps) 
                         <RemoveIcon />
                     </IconButton>
                 </Grid>
+
             </Grid>
         )
     }
