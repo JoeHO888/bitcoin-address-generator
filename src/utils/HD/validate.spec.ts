@@ -17,7 +17,6 @@ describe('Master Key Seed Validation', () => {
 
         const seed = "f".repeat(30)
 
-        console.log(isMasterKeySeedValid(seed));
         const error = isMasterKeySeedValid(seed).error;
 
         expect(error).toStrictEqual(expectedError);
