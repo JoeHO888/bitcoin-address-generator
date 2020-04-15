@@ -28,9 +28,9 @@ describe('<HDGenerator /> rendering', () => {
         expect(wrapper.find("#path")).toHaveLength(1);
     });      
 
-    it('should render a <Button />', () => {
+    it('should render two <Button />', () => {
         const shallow = createShallow();
         const wrapper = shallow(<HDGenerator/>);
-        expect(wrapper.find(Button)).toHaveLength(1);
+        expect(wrapper.find(Button)).toHaveLength(2);
     });
 });
