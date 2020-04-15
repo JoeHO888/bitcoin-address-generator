@@ -33,7 +33,6 @@ describe('Hexadecimal', () => {
         const string = "ff";
 
         const res = isStringHexadecimal(string)
-        console.log(res);
 
         expect(res).toStrictEqual(expectedRes);
     });  
