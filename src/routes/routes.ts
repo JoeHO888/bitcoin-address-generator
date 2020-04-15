@@ -9,14 +9,14 @@ const routes = {
         "description": "Generate Hierarchical Deterministic Segregated Witness P2WPKH Address from a seed and path",
         "route": "/hd-generator",
         "imagePath":"/image/home/hd.jpg",
-        "methodologyURL": "https://google.com"
+        "methodologyURL": "https://github.com/JoeHO888/bitcoin-address-generator#hierarchical-deterministic-segregated-witness-address-hd-segwit-generator"
     },
     "multiSig": {
         "title": "Multiple Signature P2SH Address (MultiSig P2SH) Generator",
         "description": "Generate Multiple Signature Address from compressed public keys",
         "route": "/multisig-generator",
         "imagePath":"/image/home/multisig.jpg",
-        "methodologyURL": "https://google.com"
+        "methodologyURL": "https://github.com/JoeHO888/bitcoin-address-generator#multiple-signature-p2sh-address-multisig-p2sh-generator"
     }
 }
 
