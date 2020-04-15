@@ -8,10 +8,10 @@ A Web Application generate two types of Bitcoin Address
 URL: https://naughty-hawking-10f012.netlify.com/
 
 ## Table of Contents
-1. [Hierarchical Deterministic Segregated Witness Address (HD SegWit) Generator](#hd-segwit)
-2. [Multiple Signature P2SH Address (MultiSig P2SH) Generator](#multisig-p2sh)
-3. [How Seed & Compressed Public Key are generated](#seed-key-generation)
-4. [Getting Started](#quickstart)
+1. [Hierarchical Deterministic Segregated Witness Address (HD SegWit) Generator](#hierarchical-deterministic-segregated-witness-address-hd-segwit-generator)
+2. [Multiple Signature P2SH Address (MultiSig P2SH) Generator](#multiple-signature-p2sh-address-multisig-p2sh-generator)
+3. [How Seed & Compressed Public Key are generated](#how-seed--compressed-public-key-are-generated)
+4. [Getting Started](#getting-started)
 5. [Folder Structure](#folder-structure)
 6. [Reference](#reference)
 
